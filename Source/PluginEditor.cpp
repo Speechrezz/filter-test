@@ -17,20 +17,34 @@ FilterTestAudioProcessorEditor::FilterTestAudioProcessorEditor (FilterTestAudioP
     // editor's size to whatever you need it to be.
     setSize (400, 300);
 
-    freqKnobAttach = std::make_unique <juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, FREQ_KNOB_ID, freqKnob);
+    gainKnobAttach = std::make_unique <juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, GAIN_KNOB_ID, gainKnob);
 
-    freqKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    freqKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 150, 25);
-    freqKnob.setTextBoxIsEditable(true);
-    freqKnob.setRange(20.f, 1000.f);
-    freqKnob.setSkewFactorFromMidPoint(500.0f);
+    gainKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    gainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 150, 25);
+    gainKnob.setTextBoxIsEditable(true);
+    gainKnob.setRange(1.f, 16.f);
+    //gainKnob.setSkewFactorFromMidPoint(500.0f);
 
-    freqKnobLabel.setText("Frequency", juce::dontSendNotification);
-    freqKnobLabel.setJustificationType(juce::Justification::centred);
-    freqKnobLabel.attachToComponent(&freqKnob, false);
+    gainKnobLabel.setText("Gain", juce::dontSendNotification);
+    gainKnobLabel.setJustificationType(juce::Justification::centred);
+    gainKnobLabel.attachToComponent(&gainKnob, false);
 
-    addAndMakeVisible(freqKnob);
+    addAndMakeVisible(gainKnob);
 	
+
+	// ================================================================
+    noteKnobAttach = std::make_unique <juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, NOTE_KNOB_ID, noteKnob);
+
+    noteKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    noteKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 150, 25);
+    noteKnob.setTextBoxIsEditable(true);
+    noteKnob.setRange(40.f, 80.f, 1.f);
+
+    noteKnobLabel.setText("Note", juce::dontSendNotification);
+    noteKnobLabel.setJustificationType(juce::Justification::centred);
+    noteKnobLabel.attachToComponent(&noteKnob, false);
+
+    addAndMakeVisible(noteKnob);
 }
 
 FilterTestAudioProcessorEditor::~FilterTestAudioProcessorEditor()
@@ -53,5 +67,7 @@ void FilterTestAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 
-    freqKnob.setBounds(100, 100, 100, 100);
+    gainKnob.setBounds(100, 100, 100, 100);
+
+    noteKnob.setBounds(200, 100, 100, 100);
 }

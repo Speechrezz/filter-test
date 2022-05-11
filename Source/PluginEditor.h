@@ -29,9 +29,13 @@ private:
     // access the processor object that created it.
     FilterTestAudioProcessor& audioProcessor;
 
-    juce::Slider freqKnob;
-    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> freqKnobAttach;
-    juce::Label freqKnobLabel;
+    juce::Slider gainKnob;
+    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> gainKnobAttach;
+    juce::Label gainKnobLabel;
+
+    juce::Slider noteKnob;
+    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> noteKnobAttach;
+    juce::Label noteKnobLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FilterTestAudioProcessorEditor)
 };

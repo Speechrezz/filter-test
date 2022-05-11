@@ -35,8 +35,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout FilterTestAudioProcessor::cr
 
     std::vector < std::unique_ptr <juce::RangedAudioParameter> > params;
 
-    auto freqParam = std::make_unique<juce::AudioParameterFloat>(FREQ_KNOB_ID, FREQ_KNOB_NAME, 20.f, 1000.f, 440.f);
-    params.push_back(std::move(freqParam));
+    auto gainParam = std::make_unique<juce::AudioParameterFloat>(GAIN_KNOB_ID, GAIN_KNOB_NAME, 1.f, 16.f, 12.f);
+    params.push_back(std::move(gainParam));
+
+    auto noteParam = std::make_unique<juce::AudioParameterFloat>(NOTE_KNOB_ID, NOTE_KNOB_NAME, 40.f, 80.f, 69.f);
+    params.push_back(std::move(noteParam));
 
     return { params.begin(), params.end() };
 }
@@ -231,22 +234,21 @@ void FilterTestAudioProcessor::setStateInformation (const void* data, int sizeIn
 
 void FilterTestAudioProcessor::updateFilters()
 {
-    const float base_freq = treeState.getRawParameterValue(FREQ_KNOB_ID)->load();
+    const float gain = treeState.getRawParameterValue(GAIN_KNOB_ID)->load();
+    const int base_note = static_cast<int>(treeState.getRawParameterValue(NOTE_KNOB_ID)->load());
+
+    if (prev_note == base_note && prev_gain == gain) return;
 
     // Loop through filters array
     for (int i = 0; i < filters.size(); i++) {
-        const float freq = base_freq * (i + 1);
-        // const float pi = 3.14159265358979323846;
+        const int note = base_note + minorKey[i];
+        const float freq = juce::MidiMessage::getMidiNoteInHertz(note);
 
-        *filters[i].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), freq, 40.f, 12.f);
-        /*auto A = std::sqrt(12.f);
-        auto omega = (2 * pi * freq) / getSampleRate();
-        auto alpha = std::sin(omega) / (40.f * 2);
-        auto c2 = -2 * std::cos(omega);
-        auto alphaTimesA = alpha * A;
-        auto alphaOverA = alpha / A;
-        DBG(juce::String(i) + ": " + juce::String(A) + ", " + juce::String(omega) + ", " + juce::String(alpha) + ", " + juce::String(c2));*/
+        *filters[i].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), freq, 40.f, gain);
+        DBG(juce::String(gain) + ", " + juce::String(note) + ", " + juce::String(freq));
     }
+    prev_note = base_note;
+    prev_gain = gain;
 }
 
 //==============================================================================

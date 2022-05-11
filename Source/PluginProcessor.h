@@ -10,8 +10,12 @@
 
 #define NUM_FILTERS 20
 
-#define FREQ_KNOB_ID "freq"
-#define FREQ_KNOB_NAME "Frequency"
+#define GAIN_KNOB_ID "gain"
+#define GAIN_KNOB_NAME "Gain"
+
+#define NOTE_KNOB_ID "note"
+#define NOTE_KNOB_NAME "Note"
+
 
 #include <JuceHeader.h>
 
@@ -62,6 +66,11 @@ public:
 
 private:
     void updateFilters();
+
+    std::array<int, 20> minorKey{ 0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31, 33 };
+
+    int prev_note{ -1 };
+    float prev_gain{ -1.f };
 	
     //==============================================================================
 	
