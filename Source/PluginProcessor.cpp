@@ -236,16 +236,16 @@ void FilterTestAudioProcessor::updateFilters()
     // Loop through filters array
     for (int i = 0; i < filters.size(); i++) {
         const float freq = base_freq * (i + 1);
-        const float pi = 3.14159265358979323846;
+        // const float pi = 3.14159265358979323846;
 
         *filters[i].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), freq, 40.f, 12.f);
-        auto A = std::sqrt(12.f);
+        /*auto A = std::sqrt(12.f);
         auto omega = (2 * pi * freq) / getSampleRate();
         auto alpha = std::sin(omega) / (40.f * 2);
         auto c2 = -2 * std::cos(omega);
         auto alphaTimesA = alpha * A;
         auto alphaOverA = alpha / A;
-        DBG(juce::String(i) + ": " + juce::String(A) + ", " + juce::String(omega) + ", " + juce::String(alpha) + ", " + juce::String(c2));
+        DBG(juce::String(i) + ": " + juce::String(A) + ", " + juce::String(omega) + ", " + juce::String(alpha) + ", " + juce::String(c2));*/
     }
 }
 
