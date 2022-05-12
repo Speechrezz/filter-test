@@ -24,6 +24,12 @@ FilterTestAudioProcessor::FilterTestAudioProcessor()
 #endif
 {
     treeState.state = juce::ValueTree("savedParams");
+
+	// Create the minorKey vector
+    minorKey.resize(MAX_NUM_FILTERS);
+	
+    for (int i = 0; i < MAX_NUM_FILTERS; i++) 
+		minorKey[i] = minorKeyOctave[i % minorKeyOctave.size()] + (i / minorKeyOctave.size()) * 12;
 }
 
 FilterTestAudioProcessor::~FilterTestAudioProcessor()
@@ -188,7 +194,7 @@ void FilterTestAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     auto context = juce::dsp::ProcessContextReplacing<float>(audioBlock);
 	
 	// Loop through filters array
-    for (int i = 0; i < filters.size(); i++) {
+    for (int i = 0; i < numFilters; i++) {
         filters[i].process(context);
     }
 	
@@ -244,8 +250,14 @@ void FilterTestAudioProcessor::updateFilters()
         const int note = base_note + minorKey[i];
         const float freq = juce::MidiMessage::getMidiNoteInHertz(note);
 
+        if (freq >= getSampleRate() / 2.f) {
+			numFilters = i;
+            //DBG("numFilters = " << numFilters);
+            break;
+        }
+
         *filters[i].state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), freq, 40.f, gain);
-        DBG(juce::String(gain) + ", " + juce::String(note) + ", " + juce::String(freq));
+        //DBG(juce::String(gain) + ", " + juce::String(note) + ", " + juce::String(freq));
     }
     prev_note = base_note;
     prev_gain = gain;

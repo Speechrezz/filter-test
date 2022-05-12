@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="J6Q1QJ" name="FilterTest" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginFormats="buildVST3">
   <MAINGROUP id="k11hFH" name="FilterTest">
     <GROUP id="{0DB9722F-E045-ACF2-1EFD-DDBD78364BA9}" name="Source">
       <FILE id="VXkyot" name="PluginProcessor.cpp" compile="1" resource="0"

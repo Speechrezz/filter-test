@@ -8,7 +8,7 @@
 
 #pragma once
 
-#define NUM_FILTERS 20
+#define MAX_NUM_FILTERS 40
 
 #define GAIN_KNOB_ID "gain"
 #define GAIN_KNOB_NAME "Gain"
@@ -67,7 +67,10 @@ public:
 private:
     void updateFilters();
 
-    std::array<int, 20> minorKey{ 0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 29, 31, 33 };
+    std::vector<int> minorKey;
+    std::array<int, 7> minorKeyOctave{ 0, 2, 4, 5, 7, 9, 11 };
+
+    int numFilters = MAX_NUM_FILTERS;
 
     int prev_note{ -1 };
     float prev_gain{ -1.f };
@@ -76,7 +79,7 @@ private:
 	
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
-    std::array<juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>>, NUM_FILTERS> filters;
+    std::array<juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>>, MAX_NUM_FILTERS> filters;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FilterTestAudioProcessor)
 };
